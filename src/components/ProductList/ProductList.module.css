@@ -1,0 +1,20 @@
+.product_list__wrapper {
+  width: 100vw;
+}
+
+.product_list {
+  width: 80vw;
+  margin: 0 auto;
+  display: flex;
+  gap: 1vw;
+  flex-wrap: wrap;
+  justify-content: start;
+}
+
+.product_list__item {
+  width: 26vw;
+}
+
+.product_list__img {
+  width: 100%;
+}
