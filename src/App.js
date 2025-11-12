@@ -1,11 +1,15 @@
-import React from 'react'
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 export default function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <p>hello there</p>
-      </header>
+      <Router>
+        <Routes>
+          <Route path="/" />
+          <Route path="/cart" />
+        </Routes>
+      </Router>
     </div>
-  )
+  );
 }
