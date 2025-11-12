@@ -12,6 +12,7 @@ import {
 import Header from "./components/Header/Header.jsx";
 import Cart from "./pages/cart/cart.jsx";
 import Shop from "./pages/shop/shop.jsx";
+import Product from "./pages/product/product.jsx";
 
 export default function App() {
   const [productsState, setProductsState] = useState({
@@ -48,7 +49,8 @@ export default function App() {
       <Router>
         <Header />
         <Routes>
-          <Route path="/" element={<Shop />} />
+          <Route path="/" element={<Shop data={productsState.products} />} />
+          <Route path="/product/:id" element={<Product />} />
           <Route path="/cart" element={<Cart />} />
         </Routes>
       </Router>
