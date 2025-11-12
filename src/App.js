@@ -1,22 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-import {
-  getSizes,
-  getSize,
-  getProducts,
-  getProduct,
-  getProductColor,
-} from "./services/api";
+import { getSizes, getProducts } from "./services/api";
 
 import Header from "./components/Header/Header.jsx";
 import Cart from "./pages/CartPage/CartPageElement.jsx";
 import ShopPageElement from "./pages/ShopPageElement/ShopPageElement.jsx";
-import Product from "./pages/Product/ProductPageElement.jsx";
+import ProductPageElement from "./pages/ProductPageElement/ProductPageElement.jsx";
 
 export default function App() {
   const [productsState, setProductsState] = useState({
-    sizes: [],
     products: [],
     loading: true,
     error: null,
@@ -26,9 +19,8 @@ export default function App() {
     const fetchData = async () => {
       try {
         const dataProducts = await getProducts();
-        const dataSizes = await getSizes();
         setProductsState((prevState) => {
-          return { ...prevState, products: dataProducts, sizes: dataSizes };
+          return { ...prevState, products: dataProducts };
         });
       } catch (error) {
         setProductsState((prevState) => {
@@ -44,24 +36,24 @@ export default function App() {
     fetchData();
   }, []);
 
+  if (productsState.error) return <div>Ошибка загрузки товара</div>;
+
   return (
     <div className="App">
       <Router>
         <Header />
-        <Routes>
-          <Route
-            path="/"
-            element={
-              productsState.loading ? (
-                <div>Загрузка...</div>
-              ) : (
-                <ShopPageElement products={productsState.products} />
-              )
-            }
-          />
-          <Route path="/product/:id" element={<Product />} />
-          <Route path="/cart" element={<Cart />} />
-        </Routes>
+        {productsState.loading ? (
+          <div>Загрузка...</div>
+        ) : (
+          <Routes>
+            <Route
+              path="/"
+              element={<ShopPageElement products={productsState.products} />}
+            />
+            <Route path="/product/:id" element={<ProductPageElement />} />
+            <Route path="/cart" element={<Cart />} />
+          </Routes>
+        )}
       </Router>
     </div>
   );
