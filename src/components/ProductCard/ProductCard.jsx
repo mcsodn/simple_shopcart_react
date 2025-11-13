@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { getProduct, getSizes } from "../../services/api";
 import styles from "./ProductCard.module.css";
 
-function ProductCard({ id }) {
+function ProductCard({ id, dispatch }) {
   const [productState, setProductState] = useState({
     productID: id,
     loading: true,
@@ -29,8 +29,8 @@ function ProductCard({ id }) {
           return {
             ...prevState,
             productData: dataProduct,
-            selectedColor: dataProduct.colors[0].id,
-            selectedSize: dataProduct.colors[0].sizes[0],
+            selectedColor: +dataProduct.colors[0].id,
+            selectedSize: +dataProduct.colors[0].sizes[0],
             sizeData: dataSizes,
           };
         });
@@ -52,7 +52,7 @@ function ProductCard({ id }) {
     setProductState((prevState) => {
       return {
         ...prevState,
-        selectedColor: productState.productData.colors.find(
+        selectedColor: +productState.productData.colors.find(
           (color) => color.name === event.target.value
         ).id,
       };
@@ -63,8 +63,19 @@ function ProductCard({ id }) {
     setProductState((prevState) => {
       return {
         ...prevState,
-        selectedSize: event.target.value,
+        selectedSize: +event.target.value,
       };
+    });
+  };
+
+  const handleAddToCart = () => {
+    dispatch({
+      type: "ADD_ITEM",
+      payload: {
+        productId: productState.productID,
+        colorId: productState.selectedColor,
+        sizeId: productState.selectedSize,
+      },
     });
   };
 
@@ -116,7 +127,9 @@ function ProductCard({ id }) {
               ))}
           </select>
           <p></p>
-          <button type="button">В корзину</button>
+          <button type="button" onClick={handleAddToCart}>
+            В корзину
+          </button>
         </>
       ) : (
         <>
