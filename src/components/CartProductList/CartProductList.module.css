@@ -1,0 +1,28 @@
+.cartItems__list {
+  width: 80vw;
+  max-width: 50rem;
+  height: 100%;
+  margin: 1rem auto;
+  display: flex;
+  gap: 2rem;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #bbb;
+}
+
+.cartItems__img {
+  width: 60px;
+  margin: 5px;
+}
+
+.cartItem__description {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  align-items: flex-start;
+  flex-grow: 1;
+}
+
+.cartItem__description * {
+  margin: 0;
+}
