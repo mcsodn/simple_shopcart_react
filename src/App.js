@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-import { getProducts } from "./services/api";
+import { getProducts, getSizes } from "./services/api";
 import {
   productCartReducer,
   productsInCartInit,
@@ -16,6 +16,7 @@ export default function App() {
   // Стейт данных
   const [productsState, setProductsState] = useState({
     products: [],
+    sizes: [],
     loading: true,
     error: null,
   });
@@ -24,9 +25,13 @@ export default function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const dataProducts = await getProducts();
+        const [dataProducts, dataSizes] = await Promise.all([
+          getProducts(),
+          getSizes(),
+        ]);
+
         setProductsState((prevState) => {
-          return { ...prevState, products: dataProducts };
+          return { ...prevState, products: dataProducts, sizes: dataSizes };
         });
       } catch (error) {
         setProductsState((prevState) => {
@@ -71,6 +76,8 @@ export default function App() {
                 <CartPageElement
                   dispatch={dispatch}
                   cartItems={productsInCart.items}
+                  products={productsState.products}
+                  sizes={productsState.sizes}
                 />
               }
             />
