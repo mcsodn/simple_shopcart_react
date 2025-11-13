@@ -10,6 +10,7 @@ export const productCartReducer = (productsInCart, action) => {
       const objKey = [productId, colorId, sizeId]
         .map(String)
         .reduce((acc, val) => (acc += val));
+
       if (!productsInCart.items[objKey]) {
         return {
           ...productsInCart,
@@ -22,7 +23,7 @@ export const productCartReducer = (productsInCart, action) => {
               quantity: 1,
             },
           },
-          total: productsInCart.total++,
+          total: productsInCart.total + 1,
         };
       } else {
         return {
@@ -30,33 +31,37 @@ export const productCartReducer = (productsInCart, action) => {
           items: {
             ...productsInCart.items,
             [objKey]: {
-              productId,
-              colorId,
-              sizeId,
-              quantity: productsInCart.items[objKey].quantity++,
+              ...productsInCart.items[objKey],
+              quantity: productsInCart.items[objKey].quantity + 1,
             },
           },
-          total: productsInCart.total++,
+          total: productsInCart.total + 1,
         };
       }
     }
+
     case "REMOVE_ITEM": {
       const { productId, colorId, sizeId } = action.payload;
       const objKey = [productId, colorId, sizeId]
         .map(String)
         .reduce((acc, val) => (acc += val));
+
       if (productsInCart.items[objKey]) {
-        const newItems = productsInCart.items;
-        delete newItems[objKey];
-        return {
-          items: newItems,
-          total: Object.values(productsInCart.items)
-            .map((v) => v.quantity)
-            .reduce((acc, val) => (acc += val)),
+        const quantityDel = productsInCart.items[objKey].quantity;
+
+        const newItems = {
+          ...productsInCart.items,
         };
-      } else {
-        return productsInCart;
+        delete newItems[objKey];
+
+        return {
+          ...productsInCart,
+          items: newItems,
+          total: productsInCart.total - quantityDel,
+        };
       }
+
+      return productsInCart;
     }
 
     default: {
